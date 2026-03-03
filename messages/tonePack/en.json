@@ -1,0 +1,102 @@
+{
+  "idle": {
+    "common": [
+      "Day officially declared non-existent.",
+      "To-do list granted 'eternal draft' status.",
+      "Energy conserved. Usage not detected.",
+      "Tasks are waiting. So are you.",
+      "Status: digital meditation.",
+      "KPI: zero. Mission accomplished.",
+      "System logging stable inactivity.",
+      "Universe expanding. You're not.",
+      "Existence confirmed. Activity optional.",
+      "Observer mode selected for today."
+    ],
+    "rare": [
+      "You've done so little it's basically performance art.",
+      "Score 3:0 in favor of horizontal position.",
+      "Bed stress-test proceeding successfully.",
+      "Personal brand: deadline ghost.",
+      "Today is that 'tomorrow' you mentioned yesterday."
+    ],
+    "legendary": [
+      "You're so stable that time slightly slowed down.",
+      "Today you beat the system. By not turning it on."
+    ]
+  },
+  "moderate": {
+    "common": [
+      "42 minutes of focus. Respectable. No overheating.",
+      "Moderate usefulness registered.",
+      "Balance: work happened, panic didn't.",
+      "Worked without strain. Respect.",
+      "List got shorter. Slightly, but factually.",
+      "29 minutes. By the book.",
+      "Panic cancelled.",
+      "Balance maintained.",
+      "Conscience silent today.",
+      "You're in the 'acceptable' range."
+    ],
+    "rare": [
+      "One task closed. World remains safe.",
+      "37 minutes without distractions. Almost suspicious.",
+      "51 minutes. Neither hero nor vegetable.",
+      "Self-respect lite activated.",
+      "Tomorrow won't start with apologies."
+    ],
+    "legendary": [
+      "You worked exactly enough to remain human.",
+      "Perfect balance between work and laziness achieved."
+    ]
+  },
+  "overheating": {
+    "common": [
+      "87 minutes straight. System concerned.",
+      "Three sessions in a row. This looks intentional.",
+      "Break ignored. We're keeping score.",
+      "Four blocks straight. This is a pattern now.",
+      "96 minutes without pause. Body still with us?",
+      "110 minutes. Alarming stability.",
+      "Break skipped again.",
+      "The 'reasonable' boundary left behind.",
+      "You're starting to look too serious.",
+      "Overheating scenario confirmed."
+    ],
+    "rare": [
+      "120 minutes. Reminder: you're not a server.",
+      "118 minutes. System considering intervention.",
+      "Tendency to ignore rest remains stable.",
+      "105 minutes. Experiment continues.",
+      "You're working like payment is immediate."
+    ],
+    "legendary": [
+      "CRITICAL: stubbornness level exceeded acceptable limits.",
+      "System contemplating forced break."
+    ]
+  },
+  "absurd": {
+    "common": [
+      "ERROR: human limit exceeded.",
+      "Log: beyond normal parameters.",
+      "WARNING: firmware not designed for this.",
+      "Counter started doubting itself.",
+      "Productivity anomaly detected.",
+      "22 blocks. System in shock.",
+      "WARNING: attention physics violated.",
+      "Sanity check failed. Continue?",
+      "CRITICAL OVERLOAD: overclock active.",
+      "Human version 1.0 doesn't support this mode."
+    ],
+    "rare": [
+      "3 hours of focus. Seriously?",
+      "17 sessions straight. Is this autorun?",
+      "Curve went into the stratosphere.",
+      "25 sessions. Checking if you're still human?",
+      "4 hours in the zone. Statistics exhausted."
+    ],
+    "legendary": [
+      "SYSTEM OVERRIDE: user exceeded simulation boundaries.",
+      "FINAL LOG: simulation starting to doubt you."
+    ]
+  }
+}

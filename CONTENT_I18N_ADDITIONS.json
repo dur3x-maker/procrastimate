@@ -1,0 +1,294 @@
+{
+  "ru": {
+    "tone": {
+      "idle": {
+        "1": "Спокойствие. Только спокойствие.",
+        "2": "Всё под контролем. Пока что.",
+        "3": "Энергия на нуле, но это нормально.",
+        "4": "Идеальное состояние для медитации.",
+        "5": "Ты в режиме энергосбережения.",
+        "6": "Батарейка разряжена, но это временно.",
+        "7": "Сейчас самое время ничего не делать.",
+        "8": "Продуктивность начинается с паузы.",
+        "9": "Ты в режиме ожидания. Это нормально.",
+        "10": "Энергия копится для великих дел.",
+        "11": "Спокойный старт — залог успеха.",
+        "12": "Пока всё идёт по плану. Какому плану?"
+      },
+      "moderate": {
+        "1": "Неплохо. Можно и лучше, но неплохо.",
+        "2": "Ты на правильном пути. Наверное.",
+        "3": "Продуктивность растёт. Медленно, но растёт.",
+        "4": "Так держать. Или не держать. Решай сам.",
+        "5": "Энергия есть, осталось её использовать.",
+        "6": "Ты работаешь. Это уже что-то.",
+        "7": "Прогресс есть. Небольшой, но есть.",
+        "8": "Ты в зоне комфортной продуктивности.",
+        "9": "Баланс найден. Почти.",
+        "10": "Энергия в норме. Пока в норме.",
+        "11": "Ты делаешь дела. Какие-то дела.",
+        "12": "Стабильность — признак мастерства."
+      },
+      "overheating": {
+        "1": "Ты горишь. В хорошем смысле.",
+        "2": "Энергия зашкаливает. Это нормально?",
+        "3": "Ты на пике. Не забудь спуститься.",
+        "4": "Продуктивность через крышу. Крыша в порядке?",
+        "5": "Ты машина. Машине нужно ТО.",
+        "6": "Перегрев detected. Охлаждение рекомендовано.",
+        "7": "Ты в огне. Буквально.",
+        "8": "Энергия бьёт ключом. Ключ где?",
+        "9": "Ты работаешь как зверь. Зверю нужен отдых.",
+        "10": "Турбо-режим активирован. Долго не протянешь.",
+        "11": "Ты на максималках. Это временно.",
+        "12": "Продуктивность 200%. Физика не одобряет."
+      },
+      "absurd": {
+        "1": "Ты превзошёл все разумные пределы.",
+        "2": "Физика плачет, глядя на твою продуктивность.",
+        "3": "Ты нарушил законы термодинамики.",
+        "4": "Энергия из ниоткуда. Нобелевка ждёт.",
+        "5": "Ты работаешь в режиме, который не должен существовать.",
+        "6": "Система не понимает, как ты это делаешь.",
+        "7": "Ты достиг абсурдного уровня продуктивности.",
+        "8": "Это уже не работа, это искусство.",
+        "9": "Ты переписал правила игры.",
+        "10": "Энергия бесконечна. Или ты робот?",
+        "11": "Ты вышел за рамки возможного.",
+        "12": "Продуктивность level: легенда."
+      }
+    },
+    "break": {
+      "short": {
+        "1": "Встань, пройдись по комнате",
+        "2": "Сделай несколько глубоких вдохов",
+        "3": "Посмотри в окно на что-то далёкое",
+        "4": "Потянись, разомни шею и плечи",
+        "5": "Выпей стакан воды",
+        "6": "Сделай 10 приседаний",
+        "7": "Закрой глаза на минуту",
+        "8": "Послушай одну любимую песню",
+        "9": "Сделай лёгкую зарядку для глаз",
+        "10": "Проветри комнату",
+        "11": "Перекуси чем-то полезным",
+        "12": "Помедитируй 5 минут"
+      },
+      "medium": {
+        "1": "Прогуляйся на свежем воздухе",
+        "2": "Приготовь себе чай или кофе",
+        "3": "Почитай несколько страниц книги",
+        "4": "Сделай полноценную растяжку",
+        "5": "Послушай подкаст или музыку",
+        "6": "Приготовь лёгкий перекус",
+        "7": "Сделай короткую тренировку",
+        "8": "Позвони другу или близкому",
+        "9": "Поиграй с питомцем",
+        "10": "Займись хобби 15 минут",
+        "11": "Прими контрастный душ",
+        "12": "Сделай дыхательные упражнения"
+      },
+      "long": {
+        "1": "Сходи на полноценную прогулку",
+        "2": "Приготовь нормальную еду",
+        "3": "Займись спортом или йогой",
+        "4": "Почитай главу книги",
+        "5": "Прими расслабляющую ванну",
+        "6": "Поспи 20-30 минут",
+        "7": "Сходи в магазин пешком",
+        "8": "Убери рабочее место",
+        "9": "Позанимайся творчеством",
+        "10": "Сделай что-то по дому",
+        "11": "Поиграй в настольную игру",
+        "12": "Послушай лекцию или вебинар"
+      }
+    },
+    "achievements": {
+      "focus_5": {
+        "title": "Первые шаги",
+        "description": "Завершите 5 фокус-сессий"
+      },
+      "focus_25": {
+        "title": "Набираю обороты",
+        "description": "Завершите 25 фокус-сессий"
+      },
+      "focus_100": {
+        "title": "Машина продуктивности",
+        "description": "Завершите 100 фокус-сессий"
+      },
+      "ignore_break_10": {
+        "title": "Я не устаю",
+        "description": "Проигнорируйте 10 предложений отдохнуть"
+      },
+      "ghost_mode_5": {
+        "title": "Режим призрака",
+        "description": "Не отвлекайтесь 5 раз подряд"
+      },
+      "early_finish_10": {
+        "title": "Эффективность 200%",
+        "description": "Завершите 10 задач досрочно"
+      },
+      "streak_7": {
+        "title": "Неделя силы",
+        "description": "Работайте 7 дней подряд"
+      },
+      "streak_30": {
+        "title": "Месяц дисциплины",
+        "description": "Работайте 30 дней подряд"
+      },
+      "night_owl": {
+        "title": "Ночная сова",
+        "description": "Завершите сессию после полуночи"
+      },
+      "marathon": {
+        "title": "Марафонец",
+        "description": "Работайте 4 часа без перерыва"
+      }
+    }
+  },
+  "en": {
+    "tone": {
+      "idle": {
+        "1": "Calm. Just calm.",
+        "2": "Everything's under control. For now.",
+        "3": "Energy at zero, but that's normal.",
+        "4": "Perfect state for meditation.",
+        "5": "You're in power-saving mode.",
+        "6": "Battery drained, but it's temporary.",
+        "7": "Now's the perfect time to do nothing.",
+        "8": "Productivity starts with a pause.",
+        "9": "You're on standby. That's okay.",
+        "10": "Energy is building for great things.",
+        "11": "Calm start is the key to success.",
+        "12": "So far, everything's going according to plan. What plan?"
+      },
+      "moderate": {
+        "1": "Not bad. Could be better, but not bad.",
+        "2": "You're on the right track. Probably.",
+        "3": "Productivity is growing. Slowly, but growing.",
+        "4": "Keep it up. Or don't. Your call.",
+        "5": "Energy's there, just need to use it.",
+        "6": "You're working. That's something.",
+        "7": "Progress exists. Small, but exists.",
+        "8": "You're in the comfort productivity zone.",
+        "9": "Balance found. Almost.",
+        "10": "Energy's normal. For now.",
+        "11": "You're doing things. Some things.",
+        "12": "Stability is a sign of mastery."
+      },
+      "overheating": {
+        "1": "You're on fire. In a good way.",
+        "2": "Energy's off the charts. Is that normal?",
+        "3": "You're at the peak. Don't forget to come down.",
+        "4": "Productivity through the roof. Roof okay?",
+        "5": "You're a machine. Machines need maintenance.",
+        "6": "Overheating detected. Cooling recommended.",
+        "7": "You're literally on fire.",
+        "8": "Energy's gushing. Where's the valve?",
+        "9": "You work like a beast. Beasts need rest.",
+        "10": "Turbo mode activated. Won't last long.",
+        "11": "You're maxed out. It's temporary.",
+        "12": "Productivity 200%. Physics disapproves."
+      },
+      "absurd": {
+        "1": "You've exceeded all reasonable limits.",
+        "2": "Physics weeps at your productivity.",
+        "3": "You've broken the laws of thermodynamics.",
+        "4": "Energy from nowhere. Nobel Prize awaits.",
+        "5": "You're working in a mode that shouldn't exist.",
+        "6": "System doesn't understand how you do this.",
+        "7": "You've reached absurd productivity levels.",
+        "8": "This isn't work anymore, it's art.",
+        "9": "You've rewritten the rules of the game.",
+        "10": "Energy is infinite. Or are you a robot?",
+        "11": "You've gone beyond the possible.",
+        "12": "Productivity level: legend."
+      }
+    },
+    "break": {
+      "short": {
+        "1": "Stand up, walk around the room",
+        "2": "Take a few deep breaths",
+        "3": "Look out the window at something distant",
+        "4": "Stretch, loosen your neck and shoulders",
+        "5": "Drink a glass of water",
+        "6": "Do 10 squats",
+        "7": "Close your eyes for a minute",
+        "8": "Listen to one favorite song",
+        "9": "Do light eye exercises",
+        "10": "Air out the room",
+        "11": "Have a healthy snack",
+        "12": "Meditate for 5 minutes"
+      },
+      "medium": {
+        "1": "Take a walk in fresh air",
+        "2": "Make yourself tea or coffee",
+        "3": "Read a few pages of a book",
+        "4": "Do a full stretch routine",
+        "5": "Listen to a podcast or music",
+        "6": "Prepare a light snack",
+        "7": "Do a short workout",
+        "8": "Call a friend or loved one",
+        "9": "Play with your pet",
+        "10": "Spend 15 minutes on a hobby",
+        "11": "Take a contrast shower",
+        "12": "Do breathing exercises"
+      },
+      "long": {
+        "1": "Go for a proper walk",
+        "2": "Cook a real meal",
+        "3": "Do sports or yoga",
+        "4": "Read a book chapter",
+        "5": "Take a relaxing bath",
+        "6": "Nap for 20-30 minutes",
+        "7": "Walk to the store",
+        "8": "Clean your workspace",
+        "9": "Do something creative",
+        "10": "Do some housework",
+        "11": "Play a board game",
+        "12": "Listen to a lecture or webinar"
+      }
+    },
+    "achievements": {
+      "focus_5": {
+        "title": "First Steps",
+        "description": "Complete 5 focus sessions"
+      },
+      "focus_25": {
+        "title": "Gaining Momentum",
+        "description": "Complete 25 focus sessions"
+      },
+      "focus_100": {
+        "title": "Productivity Machine",
+        "description": "Complete 100 focus sessions"
+      },
+      "ignore_break_10": {
+        "title": "I Don't Get Tired",
+        "description": "Ignore 10 break suggestions"
+      },
+      "ghost_mode_5": {
+        "title": "Ghost Mode",
+        "description": "Don't get distracted 5 times in a row"
+      },
+      "early_finish_10": {
+        "title": "200% Efficiency",
+        "description": "Complete 10 tasks early"
+      },
+      "streak_7": {
+        "title": "Week of Power",
+        "description": "Work 7 days in a row"
+      },
+      "streak_30": {
+        "title": "Month of Discipline",
+        "description": "Work 30 days in a row"
+      },
+      "night_owl": {
+        "title": "Night Owl",
+        "description": "Complete a session after midnight"
+      },
+      "marathon": {
+        "title": "Marathon Runner",
+        "description": "Work 4 hours without a break"
+      }
+    }
+  }
+}

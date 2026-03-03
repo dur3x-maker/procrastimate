@@ -1,0 +1,343 @@
+{
+  "landing": {
+    "hero": {
+      "title": "ProcrastiMate",
+      "subtitle": "Automate your procrastination.",
+      "description": "We don't fight procrastination — we make it a system. A smart anti-productivity assistant that honestly tells you when to stop and helps you postpone things with maximum efficiency.",
+      "cta": "Start procrastinating professionally"
+    },
+    "whyUs": {
+      "title": "Why us",
+      "card1": {
+        "title": "You're not lazy — you're overheated",
+        "description": "Your brain isn't broken. It's just tired from endless sprints. We help you legalize rest."
+      },
+      "card2": {
+        "title": "Procrastination as a system",
+        "description": "Instead of chaotic postponing — a structured approach. Plan your procrastination like a professional."
+      },
+      "card3": {
+        "title": "Cynical, but honest",
+        "description": "No motivational quotes. Just the truth about how you actually spend your day."
+      }
+    },
+    "footer": {
+      "copy": "© 2025 ProcrastiMate. All rights postponed."
+    }
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "login": {
+      "title": "Sign In",
+      "subtitle": "Welcome back. We knew you'd return.",
+      "button": "Sign In",
+      "noAccount": "Don't have an account?",
+      "register": "Register",
+      "error": "Invalid email or password"
+    },
+    "register": {
+      "title": "Register",
+      "subtitle": "The first step to professional procrastination.",
+      "button": "Create Account",
+      "hasAccount": "Already have an account?",
+      "login": "Sign In",
+      "error": "This email is already registered"
+    }
+  },
+  "dashboard": {
+    "energyLabel": "Energy Score",
+    "energyInner": "Energy",
+    "cynicalLow": "You haven't warmed up yet. And it's suspiciously comfortable.",
+    "cynicalMid": "Not bad. But could be better.",
+    "cynicalHigh": "You're at your peak. Or is it an illusion?",
+    "statsFocus": "focus",
+    "statsSessions": "sessions",
+    "statsBreaks": "breaks",
+    "buildEmpire": "Start building an empire",
+    "endSession": "End session",
+    "destroyDay": "Destroy my day",
+    "breakCard": {
+      "title": "You officially overheated",
+      "description": "Time to rest and watch kittens.",
+      "button": "Open kittens",
+      "ancientMemes": "Open ancient memes",
+      "randomVideo2009": "Random video 2009",
+      "doNothing": "Do nothing (recommended)"
+    },
+    "modal": {
+      "title": "Therapeutic Kittens",
+      "close": "Close"
+    },
+    "achievements": {
+      "title": "Achievements",
+      "loading": "Loading...",
+      "robotyaga": "Workaholic Bot",
+      "catLover": "Cat Lover",
+      "mondayHero": "Monday Hero",
+      "accidentallyProductive": "Accidentally Productive",
+      "tumbleweedMaster": "Tumbleweed Master",
+      "ignoredBreak": "Ignored Break",
+      "worked3Hours": "Worked 3+ Hours",
+      "gaveUpBeautifully": "Gave Up Beautifully",
+      "observer": "Observer"
+    },
+    "greeting": "Hey, procrastinator",
+    "logout": "Logout",
+    "giveUp": "Give up for today",
+    "destroyDayAnalysis": "Day Analysis",
+    "overheatDetected": "You officially overheated",
+    "overheatNotification": " Overheating detected. Consider taking a break.",
+    "miniStats": "Today",
+    "completedTasks": "Completed Tasks",
+    "shareButton": "Share this moment",
+    "distractMe": "🎮 Distract Me",
+    "dayReview": "Day Review",
+    "forMe": "For me",
+    "forReport": "For report"
+  },
+  "tasks": {
+    "title": "Tasks & Slots",
+    "closeDaySummary": "Today you productively rested for {time}. {remaining} {tasks} survived this day. You earned a reboot.",
+    "closeDayTask": "task",
+    "closeDayTasks": "tasks",
+    "titlePlaceholder": "What needs to be done?",
+    "addButton": "Add Task",
+    "minutes": "min",
+    "startTask": "Start Task",
+    "startBreak": "Start Slot",
+    "completeButton": "Complete",
+    "empty": "No tasks yet. Perfect day, honestly.",
+    "dayClosedTitle": "Day officially completed.",
+    "dayClosedSubtitle": "Or did you decide to keep going?"
+  },
+  "justification": {
+    "title": "Excuse Generator",
+    "descriptionLabel": "What was delayed?",
+    "descriptionPlaceholder": "E.g.: project report",
+    "levelLabel": "Epic Level",
+    "levelMin": "Normal",
+    "levelMax": "Epic",
+    "generateButton": "Generate",
+    "resultsTitle": "Pick one:",
+    "copy": "Copy",
+    "copied": "Copied!"
+  },
+  "stats": {
+    "title": "Procrastination Stats",
+    "totalBreakTime": "Break Time",
+    "restPercentage": "% of day resting",
+    "avgTimeToBreak": "Avg to break",
+    "completedTasks": "Completed Tasks",
+    "badge": {
+      "novice": "Laziness Novice",
+      "pro": "Postponement Pro",
+      "master": "Master of Nothing"
+    },
+    "weekly": "Week",
+    "monthly": "Month",
+    "totalFocus": "Focus Time",
+    "totalBreak": "Break Time",
+    "sessions": "Sessions",
+    "tasks": "Tasks",
+    "streak": "Streak",
+    "loading": "Loading...",
+    "error": "Failed to load statistics"
+  },
+  "breakModal": {
+    "timeoutText": "Who are you trying to prove something to? Better prove to me that Earth is round. Pour some coffee.",
+    "timeoutButton": "Accept fate",
+    "earlyText": "{tumbleweed} Finished early. Take a breather.",
+    "earlyButton": "Open tumbleweeds",
+    "earlyDismiss": "Keep working",
+    "breaksNotMyThing": "Breaks Are Not My Thing"
+  },
+  "activeSession": {
+    "taskTitle": "Active Task",
+    "breakTitle": "Official Break",
+    "complete": "Complete",
+    "giveUp": "Give Up",
+    "overtime": "Running {time} over (could've had tea and thought about Burj Khalifa)"
+  },
+  "nav": {
+    "login": "Sign In",
+    "register": "Register",
+    "dashboard": "Dashboard"
+  },
+  "breakSuggestion": {
+    "message": "You're overheating. Maybe take a break?",
+    "openDistractions": "Open Distractions",
+    "ignore": "Ignore"
+  },
+  "funEngine": {
+    "title": "Distraction Engine",
+    "loading": "Loading...",
+    "cats": "🐱 Cats",
+    "dogFails": "🐶 Dog Fails",
+    "science": "🔬 Science",
+    "meme": "😂 Meme",
+    "absurd": "📖 Maybe Read Something?",
+    "noEmbed": "YouTube search results cannot be embedded",
+    "openYoutube": "Open in YouTube →",
+    "minRead": "min read",
+    "learnMore": "Learn more →",
+    "back": "← Back",
+    "close": "Close",
+    "noContent": "No content available. Try again later.",
+    "open": "Open",
+    "menu": {
+      "memes": "Watch some memes?",
+      "video": "Check out a video?",
+      "read": "Maybe read something?",
+      "meditation": "Or maybe meditation?",
+      "rest": "Just take a break?"
+    },
+    "memes": {
+      "title": "Memes"
+    },
+    "video": {
+      "title": "Video",
+      "oneMore": "One more?",
+      "yes": "Yes, let's go",
+      "no": "Next time",
+      "backToWork": "Back to work then"
+    },
+    "read": {
+      "title": "Read",
+      "oneMore": "One more?",
+      "yes": "Yes, let's go",
+      "no": "Next time",
+      "backToWork": "Back to work then"
+    },
+    "meditation": {
+      "title": "Meditation",
+      "inhale": "Inhale",
+      "hold": "Hold",
+      "exhale": "Exhale",
+      "complete": "Session complete"
+    },
+    "rest": {
+      "title": "Just Rest",
+      "message": "Rest. When you're ready — press the button."
+    },
+    "continueWork": "Continue Working"
+  },
+  "overheating": {
+    "highTitle": "System intervention: cooldown recommended",
+    "highSubtitle": "You're running hot. Time to step back before burnout.",
+    "chaosTitle": "CRITICAL: forced cooldown initiated",
+    "chaosSubtitle": "You've exceeded safe productivity limits. Mandatory cooldown recommended.",
+    "bodyReset": "Body Reset",
+    "absurd": "Absurd Wisdom",
+    "video": "Video Break",
+    "resist": "I'll resist",
+    "close": "Close",
+    "loadingVideo": "Loading video...",
+    "videoFallback": "Video unavailable. Take a deep breath instead.",
+    "videoTitle": "Break Time",
+    "noEmbed": "Video preview not available",
+    "openVideo": "Open Video"
+  },
+  "tone": {
+    "overheating": {
+      "1": "{minutes} minutes without a break. Trying to impress someone?",
+      "2": "{sessions} sessions in a row. That's not focus — that's personality.",
+      "3": "{hours} hours deep in work. Even I'm getting tired for you.",
+      "4": "{minutes} minutes without moving. Your back would like a word.",
+      "5": "{sessions} sessions straight. Breaks officially feel ignored.",
+      "6": "{minutes} minutes of focus. Testing the limit?",
+      "7": "{streak} sessions in a row. That's almost legendary.",
+      "8": "{hours} hours in. Your eyes are asking for a blink.",
+      "9": "{minutes} minutes. System detecting slight overdrive.",
+      "10": "{sessions} sessions straight. Even coffee looks concerned.",
+      "11": "{minutes} minutes without pause. Stats are getting nervous.",
+      "12": "{streak} sessions. Overheating is approaching.",
+      "13": "{hours} hours. Impressive. But you're still human.",
+      "14": "{minutes} minutes. Competing with yourself?",
+      "15": "{sessions} sessions. Maybe slow down a little?",
+      "16": "{minutes} minutes already. This feels more like stubbornness.",
+      "17": "{streak} sessions in a row. Respect. Take care of yourself.",
+      "18": "{hours} hours of focus. Machines don't even run like this."
+    },
+    "absurd": {
+      "1": "This stopped being a day and became performance art.",
+      "2": "Your stats went for a walk without you.",
+      "3": "Numbers have slightly lost their meaning.",
+      "4": "You bent the curve of normal.",
+      "5": "This looks like a meme without a picture.",
+      "6": "Are we in a parallel universe? Feels like it.",
+      "7": "Anomaly detected. Proceed anyway?",
+      "8": "This is dangerously close to art.",
+      "9": "Breaks are quietly crying somewhere.",
+      "10": "You're mildly intimidating the algorithm.",
+      "11": "The logs are whispering something strange.",
+      "12": "Is this a new competitive sport?",
+      "13": "Statistics are looking at you with respect.",
+      "14": "You stepped slightly outside the frame.",
+      "15": "The simulation paused for a second.",
+      "16": "This is too clean to be completely sane."
+    },
+    "idle": {
+      "1": "The day passed in 'just existing' mode. That's allowed.",
+      "2": "Nothing happened. There's a calm in that.",
+      "3": "The list is empty. You're still here.",
+      "4": "You chose pause. It suits you.",
+      "5": "Zero tasks, balance intact.",
+      "6": "It was simply a day. No drama required.",
+      "7": "You didn't break anything. That counts.",
+      "8": "A slower rhythm. It has its own music.",
+      "9": "No progress. Still peaceful.",
+      "10": "You existed. That's enough."
+    }
+  },
+  "break": {
+    "short": {
+      "1": "Walk around the room backwards for a minute.",
+      "2": "Move three things on your desk and declare a revolution.",
+      "3": "Dance using only your shoulders.",
+      "4": "Take three slow, deliberate breaths.",
+      "5": "Roll your neck gently and look for the lost thought.",
+      "6": "Wink at your reflection and wait for it to respond.",
+      "7": "Clench your fists, then let go.",
+      "8": "Walk across the room stepping only on shadows.",
+      "9": "Give your chair a name and a dramatic backstory.",
+      "10": "Count the corners in the room and decide which one is suspicious."
+    },
+    "medium": {
+      "1": "Walk around the room backwards for a minute.",
+      "2": "Move three things on your desk and declare a revolution.",
+      "3": "Dance using only your shoulders.",
+      "4": "Take three slow, deliberate breaths.",
+      "5": "Roll your neck gently and look for the lost thought.",
+      "6": "Wink at your reflection and wait for it to respond.",
+      "7": "Clench your fists, then let go.",
+      "8": "Walk across the room stepping only on shadows.",
+      "9": "Give your chair a name and a dramatic backstory.",
+      "10": "Count the corners in the room and decide which one is suspicious."
+    },
+    "long": {
+      "1": "Walk around the room backwards for a minute.",
+      "2": "Move three things on your desk and declare a revolution.",
+      "3": "Dance using only your shoulders.",
+      "4": "Take three slow, deliberate breaths.",
+      "5": "Roll your neck gently and look for the lost thought.",
+      "6": "Wink at your reflection and wait for it to respond.",
+      "7": "Clench your fists, then let go.",
+      "8": "Walk across the room stepping only on shadows.",
+      "9": "Give your chair a name and a dramatic backstory.",
+      "10": "Count the corners in the room and decide which one is suspicious."
+    }
+  },
+  "videoButton": {
+    "1": "Dive into something unexpected",
+    "2": "Open a door to nowhere",
+    "3": "Wake the quiet chaos",
+    "4": "Pull the curtain aside",
+    "5": "Release a little pressure",
+    "6": "Find something slightly off",
+    "7": "Give your brain five minutes off",
+    "8": "Peek into a strange corner",
+    "9": "Unwind a thread of curiosity",
+    "10": "Touch the edge of the unusual"
+  }
+}
