@@ -165,7 +165,7 @@ async def add_rest_time_to_session(
     existing = result.scalar_one_or_none()
     
     if existing:
-        existing.rest_minutes += rest_minutes
+        existing.break_minutes += rest_minutes
         await db.flush()
         return existing
     else:
@@ -173,8 +173,8 @@ async def add_rest_time_to_session(
             user_id=user_id,
             date=today,
             focus_minutes=0,
-            break_minutes=0,
-            rest_minutes=rest_minutes,
+            break_minutes=rest_minutes,
+            rest_minutes=0,
             session_count=0,
             completed_tasks=0,
         )

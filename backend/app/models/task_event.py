@@ -14,7 +14,9 @@ class TaskEvent(Base):
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     task_id = Column(String, nullable=False)
     session_id = Column(UUID(as_uuid=True), ForeignKey("session_history.id", ondelete="SET NULL"), nullable=True)
-    event_type = Column(String, nullable=False)  # "task_completed"
+    event_type = Column(String, nullable=False)  # "task_completed", "session_start", etc.
+    idempotency_key = Column(String, unique=True, nullable=True, index=True)
+    client_session_id = Column(String, nullable=True, index=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     user = relationship("User")

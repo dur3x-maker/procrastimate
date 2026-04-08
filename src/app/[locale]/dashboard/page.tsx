@@ -11,7 +11,7 @@ import { useBackendStats } from "@/hooks/useBackendStats";
 import { api } from "@/lib/api";
 import { TaskList } from "@/components/TaskList";
 import { JustificationGenerator } from "@/components/JustificationGenerator";
-import { ProcrastinationStats } from "@/components/ProcrastinationStats";
+
 import { StatsPanel } from "@/components/StatsPanel";
 import { ActiveSessionPanel } from "@/components/ActiveSessionPanel";
 import { BreakModal } from "@/components/BreakModal";
@@ -26,6 +26,7 @@ import { calculateEnergy, type EnergyLevel } from "@/lib/energy";
 import { incrementFunEngineOpens, incrementResistedDistractions, incrementSkippedBreaks, getFunEngineOpensToday, getSkippedBreaksToday, incrementIgnoredBreaks, getIgnoredBreaksToday, getLastBreakSuggestionTime, setLastBreakSuggestionTime } from "@/lib/dailyCounters";
 import { getRandomDayStartText } from "@/lib/dayStartGenerator";
 import { getUserId } from "@/lib/userId";
+import { sendEventWithRetry, flushEventQueue } from "@/lib/eventQueue";
 
 function formatTime(ms: number): string {
   const totalMin = Math.floor(ms / 60_000);
@@ -166,6 +167,7 @@ export default function DashboardPage() {
   const hasTrackedGhost = useRef(false);
   const [showBreakSuggestion, setShowBreakSuggestion] = useState(false);
   const [userId, setUserId] = useState("");
+  const [clientSessionId, setClientSessionId] = useState<string | null>(null);
 
   const store = useDashboardStore();
   const taskStore = useTasks();
@@ -182,13 +184,24 @@ export default function DashboardPage() {
     if (!userId) return;
     
     taskStore.setOnTaskCompleted(async (taskId: string) => {
-      await api.triggerTaskCompleted(userId, taskId);
+      const idemKey = `tc_${taskId}_${Date.now()}`;
+      console.log("[event] task_completed sent:", taskId, "idem:", idemKey);
+      await sendEventWithRetry(userId, "task_completed", {
+        task_id: taskId,
+        idempotency_key: idemKey,
+        client_session_id: clientSessionId,
+      });
       await backendStats.refreshStats();
     });
     
     store.setOnSessionEnded(async (metadata) => {
-      await backendAchievements.triggerEvent("session_ended", metadata);
+      console.log("[event] session_ended sent:", metadata);
+      await sendEventWithRetry(userId, "session_ended", {
+        ...metadata,
+        client_session_id: clientSessionId,
+      });
       await backendStats.refreshStats();
+      setClientSessionId(null);
     });
     
     callbacksSetRef.current = true;
@@ -279,6 +292,7 @@ export default function DashboardPage() {
   useEffect(() => {
     if (mounted && backendAchievements.userId) {
       backendAchievements.updateStreak();
+      flushEventQueue(backendAchievements.userId);
       
       if (!hasTrackedGhost.current) {
         backendAchievements.trackGhost(false);
@@ -366,11 +380,19 @@ export default function DashboardPage() {
   const canStartSession = !store.sessionActive && !taskStore.activeTask && hasWorkTasks;
   const canEndSession = store.sessionActive;
 
+  // Record session start on backend (server-side timestamp for focus_minutes)
+  const handleStartSession = () => {
+    const csid = crypto.randomUUID();
+    setClientSessionId(csid);
+    store.startSession();
+    sendEventWithRetry(userId, "session_start", { client_session_id: csid });
+  };
+
   // Auto-start workday when starting first task
   const handleStartTask = (id: string) => {
     handleUserAction();
     if (!store.sessionActive) {
-      store.startSession();
+      handleStartSession();
     }
     taskStore.startTask(id);
     store.setActiveTaskId(id);
@@ -437,7 +459,11 @@ export default function DashboardPage() {
             {/* Active Session Panel */}
             <ActiveSessionPanel
               activeTask={taskStore.activeTask}
-              elapsedMs={taskStore.activeTask?.startedAt ? now - taskStore.activeTask.startedAt : 0}
+              elapsedMs={taskStore.activeTask?.startedAt
+                ? (taskStore.activeTask.pausedAt
+                    ? taskStore.activeTask.pausedAt - taskStore.activeTask.startedAt - (taskStore.activeTask.totalPausedMs || 0)
+                    : now - taskStore.activeTask.startedAt - (taskStore.activeTask.totalPausedMs || 0))
+                : 0}
               onComplete={() => {
                 if (taskStore.activeTask?.type === "work") {
                   handleCompleteTask(taskStore.activeTask.id);
@@ -471,7 +497,7 @@ export default function DashboardPage() {
                   } else {
                     if (!canStartSession) return;
                     handleUserAction();
-                    store.startSession();
+                    handleStartSession();
                     setDayStartCTA(getRandomDayStartText(locale));
                   }
                 }}
@@ -494,11 +520,11 @@ export default function DashboardPage() {
               </h3>
               <div className="grid grid-cols-2 gap-x-3 gap-y-0.5 text-xs">
                 <span className="text-muted">{t("statsFocus")}:</span>
-                <span className="font-semibold text-right">{formatTime(store.todayTotalTime)}</span>
+                <span className="font-semibold text-right">{backendStats.dailySession ? `${backendStats.dailySession.focus_minutes}м` : formatTime(store.todayTotalTime)}</span>
                 <span className="text-muted">{t("statsSessions")}:</span>
-                <span className="font-semibold text-right">{store.sessionCount}</span>
+                <span className="font-semibold text-right">{sessionCount}</span>
                 <span className="text-muted">{t("statsBreaks")}:</span>
-                <span className="font-semibold text-right">{store.breaksTaken}</span>
+                <span className="font-semibold text-right">{breakMinutes}м</span>
                 <span className="text-muted">{t("completedTasks")}:</span>
                 <span className="font-semibold text-right">{completedTasks}</span>
               </div>
@@ -555,13 +581,6 @@ export default function DashboardPage() {
               }}
             />
 
-            {/* Procrastination Stats */}
-            <ProcrastinationStats
-              breakTimeToday={breakMinutes}
-              completedTasksToday={completedTasks}
-              tasks={taskStore.tasks}
-            />
-
             {/* Backend Stats Panel */}
             <StatsPanel />
 
@@ -591,7 +610,7 @@ export default function DashboardPage() {
       <DestroyDayModal
         open={destroyDayModalOpen}
         onClose={() => setDestroyDayModalOpen(false)}
-        focusMinutes={Math.floor(store.todayTotalTime / 60_000)}
+        focusMinutes={backendStats.dailySession?.focus_minutes || Math.floor(store.todayTotalTime / 60_000)}
         breakMinutes={breakMinutes}
         completedTasks={completedTasks}
       />
@@ -603,6 +622,15 @@ export default function DashboardPage() {
         energyLevel={currentEnergyLevel}
         userId={userId}
         sessionActive={store.sessionActive}
+        onStatsRefresh={backendStats.refreshStats}
+        onBreakStart={() => {
+          backendAchievements.triggerEvent("break_start", { client_session_id: clientSessionId }).catch((e) =>
+            console.error("[event] break_start failed:", e)
+          );
+        }}
+        onBreakEnd={async () => {
+          await backendAchievements.triggerEvent("break_end", { client_session_id: clientSessionId });
+        }}
       />
 
       {/* Day Review Modal */}

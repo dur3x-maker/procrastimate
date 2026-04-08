@@ -113,7 +113,7 @@ export function useTasks(): TasksState {
   const [dayClosed, setDayClosed] = useState(false);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [currentDayKey] = useState(getDayKey());
-  const [onTaskCompletedCallback, setOnTaskCompletedCallback] = useState<(() => void) | null>(null);
+  const [onTaskCompletedCallback, setOnTaskCompletedCallback] = useState<((taskId: string) => void) | null>(null);
 
   useEffect(() => {
     resetIfNewDay();
@@ -202,19 +202,12 @@ export function useTasks(): TasksState {
       const task = tasks.find((t) => t.id === id);
       if (!task) return;
 
-      const actualElapsed = elapsedMs ?? (task.startedAt ? Date.now() - task.startedAt : 0);
-      const totalPausedMs = task.totalPausedMs || 0;
-      const netElapsed = actualElapsed - totalPausedMs;
-
       const updated = tasks.map((t) =>
         t.id === id ? { ...t, completed: true, status: "completed" as TaskStatus } : t
       );
       saveTasks(updated);
 
-      const plannedMs = task.durationMin * 60_000;
-      const countProgress = netElapsed >= plannedMs * 0.5;
-
-      if (task.type === "work" && countProgress && onTaskCompletedCallback) {
+      if (task.type === "work" && onTaskCompletedCallback) {
         onTaskCompletedCallback(id);
       }
 

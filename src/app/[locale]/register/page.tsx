@@ -4,32 +4,44 @@ import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { useState } from "react";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 export default function RegisterPage() {
   const t = useTranslations("auth");
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
-    const stored = localStorage.getItem("procrastimate_user");
-    if (stored) {
-      const existing = JSON.parse(stored);
-      if (existing.email === email) {
-        setError(t("register.error"));
+    try {
+      const res = await fetch(`${API_URL}/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        setError(data?.detail || t("register.error"));
         return;
       }
-    }
 
-    localStorage.setItem(
-      "procrastimate_user",
-      JSON.stringify({ email, password })
-    );
-    localStorage.setItem("procrastimate_auth", "true");
-    router.push("/dashboard");
+      const user = await res.json();
+      localStorage.setItem("procrastimate_user", JSON.stringify(user));
+      localStorage.setItem("procrastimate_auth", "true");
+      localStorage.setItem("pm_user_id", user.id);
+      router.push("/dashboard");
+    } catch {
+      setError(t("register.error"));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

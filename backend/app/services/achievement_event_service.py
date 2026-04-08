@@ -1,11 +1,18 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, and_
 from uuid import UUID
-from datetime import datetime
+from datetime import datetime, date
 import logging
 
 from app.models.achievement import AchievementProgress
-from app.services.task_event_service import record_task_completed
+from app.models.session_history import SessionHistory
+from app.services.task_event_service import (
+    record_task_completed,
+    record_session_start,
+    resolve_session_end,
+    record_break_start,
+    resolve_break_end,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -69,21 +76,27 @@ async def _increment_achievement(
     achievement = result.scalar_one_or_none()
 
     if achievement is None:
+        clamped = min(increment, target)
         achievement = AchievementProgress(
             user_id=user_id,
             achievement_id=achievement_id,
-            progress=increment,
-            unlocked=False,
+            progress=clamped,
+            unlocked=clamped >= target,
         )
         db.add(achievement)
         await db.flush()
-    elif not achievement.unlocked:
-        achievement.progress += increment
+        if achievement.unlocked:
+            return {"unlocked_now": True, "achievement_id": achievement_id}
+        return {"unlocked_now": False, "achievement_id": None}
 
-    now_unlocked = achievement.progress >= target
-    was_unlocked = achievement.unlocked
+    # Already unlocked — no further changes
+    if achievement.unlocked:
+        return {"unlocked_now": False, "achievement_id": None}
 
-    if now_unlocked and not was_unlocked:
+    # Clamp progress to target
+    achievement.progress = min(achievement.progress + increment, target)
+
+    if achievement.progress >= target:
         achievement.unlocked = True
         return {"unlocked_now": True, "achievement_id": achievement_id}
 
@@ -102,19 +115,68 @@ async def trigger_achievement_event(
         # Record the task completion event
         task_id = metadata.get("task_id") if metadata else None
         session_id = metadata.get("session_id") if metadata else None
-        logger.info(f"[TASK_COMPLETED] user_id={user_id}, task_id={task_id}, session_id={session_id}")
+        idem_key = metadata.get("idempotency_key") if metadata else None
+        csid = metadata.get("client_session_id") if metadata else None
+        logger.info(f"[TASK_COMPLETED] user_id={user_id}, task_id={task_id}, idem_key={idem_key}")
+        is_new_event = False
         if task_id:
-            event_record = await record_task_completed(db, user_id, task_id, session_id)
-            logger.info(f"[TASK_COMPLETED] Event recorded: event_id={event_record.id}")
+            event_record = await record_task_completed(db, user_id, task_id, session_id, idem_key, csid)
+            if event_record is not None:
+                is_new_event = True
+                logger.info(f"[TASK_COMPLETED] New event recorded: event_id={event_record.id}")
+            else:
+                logger.info(f"[TASK_COMPLETED] Duplicate skipped for task_id={task_id}")
         else:
             logger.warning(f"[TASK_COMPLETED] No task_id provided in metadata for user {user_id}")
         
-        for achievement_id in EVENT_TO_ACHIEVEMENTS.get("task_completed", []):
-            result = await _increment_achievement(db, user_id, achievement_id, 1)
-            if result["unlocked_now"]:
-                unlocked.append(result)
+        # Only increment achievements for new events (not duplicates)
+        if is_new_event:
+            for achievement_id in EVENT_TO_ACHIEVEMENTS.get("task_completed", []):
+                result = await _increment_achievement(db, user_id, achievement_id, 1)
+                if result["unlocked_now"]:
+                    unlocked.append(result)
+    
+    elif event == "session_start":
+        csid = metadata.get("client_session_id") if metadata else None
+        await record_session_start(db, user_id, csid)
+        logger.info(f"[SESSION_START] Server timestamp recorded for user {user_id}, csid={csid}")
     
     elif event == "session_ended":
+        csid = metadata.get("client_session_id") if metadata else None
+        focus_minutes = await resolve_session_end(db, user_id, csid)
+        
+        if focus_minutes is not None:
+            today = date.today()
+            result_sh = await db.execute(
+                select(SessionHistory).where(
+                    and_(
+                        SessionHistory.user_id == user_id,
+                        SessionHistory.date == today
+                    )
+                )
+            )
+            session = result_sh.scalar_one_or_none()
+            if session:
+                session.focus_minutes += focus_minutes
+                session.session_count += 1
+                await db.flush()
+                logger.info(f"[SESSION_ENDED] Updated session: focus_minutes+={focus_minutes}, session_count+1 (now {session.session_count})")
+            else:
+                new_session = SessionHistory(
+                    user_id=user_id,
+                    date=today,
+                    focus_minutes=focus_minutes,
+                    break_minutes=0,
+                    rest_minutes=0,
+                    session_count=1,
+                    completed_tasks=0,
+                )
+                db.add(new_session)
+                await db.flush()
+                logger.info(f"[SESSION_ENDED] Created session: focus_minutes={focus_minutes}, session_count=1")
+        else:
+            logger.warning(f"[SESSION_ENDED] No matching session_start, stats not updated for user {user_id}")
+        
         for achievement_id in EVENT_TO_ACHIEVEMENTS.get("session_ended", []):
             result = await _increment_achievement(db, user_id, achievement_id, 1)
             if result["unlocked_now"]:
@@ -138,6 +200,51 @@ async def trigger_achievement_event(
                     result = await _increment_achievement(db, user_id, achievement_id, 1)
                     if result["unlocked_now"]:
                         unlocked.append(result)
+    
+    elif event == "break_start":
+        csid = metadata.get("client_session_id") if metadata else None
+        await record_break_start(db, user_id, csid)
+        logger.info(f"[BREAK_START] Server timestamp recorded for user {user_id}, csid={csid}")
+    
+    elif event == "break_end":
+        csid = metadata.get("client_session_id") if metadata else None
+        calc_break_minutes = await resolve_break_end(db, user_id, csid)
+        
+        if calc_break_minutes is not None:
+            today = date.today()
+            result_br = await db.execute(
+                select(SessionHistory).where(
+                    and_(
+                        SessionHistory.user_id == user_id,
+                        SessionHistory.date == today
+                    )
+                )
+            )
+            session = result_br.scalar_one_or_none()
+            if session:
+                session.break_minutes += calc_break_minutes
+                await db.flush()
+                logger.info(f"[BREAK_END] Updated session: break_minutes+={calc_break_minutes} (now {session.break_minutes})")
+            else:
+                new_session = SessionHistory(
+                    user_id=user_id,
+                    date=today,
+                    focus_minutes=0,
+                    break_minutes=calc_break_minutes,
+                    rest_minutes=0,
+                    session_count=0,
+                    completed_tasks=0,
+                )
+                db.add(new_session)
+                await db.flush()
+                logger.info(f"[BREAK_END] Created session: break_minutes={calc_break_minutes}")
+        else:
+            logger.warning(f"[BREAK_END] No matching break_start for user {user_id}")
+        
+        for achievement_id in EVENT_TO_ACHIEVEMENTS.get("break_taken", []):
+            result = await _increment_achievement(db, user_id, achievement_id, 1)
+            if result["unlocked_now"]:
+                unlocked.append(result)
     
     elif event == "break_ignored":
         for achievement_id in EVENT_TO_ACHIEVEMENTS.get("break_ignored", []):

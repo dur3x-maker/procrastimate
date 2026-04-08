@@ -4,27 +4,45 @@ import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { useState } from "react";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 export default function LoginPage() {
   const t = useTranslations("auth");
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
-    const stored = localStorage.getItem("procrastimate_user");
-    if (stored) {
-      const user = JSON.parse(stored);
-      if (user.email === email && user.password === password) {
-        localStorage.setItem("procrastimate_auth", "true");
-        router.push("/dashboard");
+    try {
+      const res = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        setError(data?.detail || t("login.error"));
         return;
       }
+
+      const user = await res.json();
+      localStorage.setItem("procrastimate_user", JSON.stringify(user));
+      localStorage.setItem("procrastimate_auth", "true");
+      // Store backend user ID for API calls
+      localStorage.setItem("pm_user_id", user.id);
+      router.push("/dashboard");
+    } catch {
+      setError(t("login.error"));
+    } finally {
+      setLoading(false);
     }
-    setError(t("login.error"));
   };
 
   return (
@@ -72,9 +90,10 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full py-3 rounded-full bg-gradient-to-r from-purple-start to-purple-end text-white font-semibold hover:opacity-90 transition-opacity"
+            disabled={loading}
+            className="w-full py-3 rounded-full bg-gradient-to-r from-purple-start to-purple-end text-white font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
           >
-            {t("login.button")}
+            {loading ? "..." : t("login.button")}
           </button>
         </form>
 

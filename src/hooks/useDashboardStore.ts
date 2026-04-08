@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { saveDailySession } from "@/api/session";
-import { getUserId } from "@/lib/userId";
 
 // ── localStorage keys ──
 const KEYS = {

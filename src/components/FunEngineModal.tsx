@@ -10,11 +10,14 @@ interface FunEngineModalProps {
   energyLevel?: string;
   userId: string;
   sessionActive?: boolean;
+  onStatsRefresh?: () => void;
+  onBreakStart?: () => void;
+  onBreakEnd?: () => void;
 }
 
 type Mode = "menu" | "memes" | "video" | "read" | "meditation" | "rest";
 
-export function FunEngineModal({ open, onClose, energyLevel, userId, sessionActive = false }: FunEngineModalProps) {
+export function FunEngineModal({ open, onClose, energyLevel, userId, sessionActive = false, onStatsRefresh, onBreakStart, onBreakEnd }: FunEngineModalProps) {
   const [mode, setMode] = useState<Mode>("menu");
   const [loading, setLoading] = useState(false);
   const [memes, setMemes] = useState<FunContent[]>([]);
@@ -26,8 +29,7 @@ export function FunEngineModal({ open, onClose, energyLevel, userId, sessionActi
   const [meditationPhase, setMeditationPhase] = useState<"inhale" | "hold" | "exhale">("inhale");
   const [meditationComplete, setMeditationComplete] = useState(false);
   const [meditationTime, setMeditationTime] = useState(0);
-  const startTimeRef = useRef<number>(0);
-  const restSubmittedRef = useRef<boolean>(false);
+  const breakStartedRef = useRef<boolean>(false);
   const t = useTranslations("funEngine");
 
   const loadMemes = async () => {
@@ -83,8 +85,11 @@ export function FunEngineModal({ open, onClose, energyLevel, userId, sessionActi
 
   useEffect(() => {
     if (open) {
-      startTimeRef.current = Date.now();
-      restSubmittedRef.current = false;
+      breakStartedRef.current = false;
+      if (onBreakStart) {
+        onBreakStart();
+        breakStartedRef.current = true;
+      }
     }
   }, [open]);
 
@@ -139,17 +144,14 @@ export function FunEngineModal({ open, onClose, energyLevel, userId, sessionActi
   };
 
   const handleClose = async () => {
-    if (sessionActive && !restSubmittedRef.current && startTimeRef.current > 0) {
-      const restDurationSeconds = Math.floor((Date.now() - startTimeRef.current) / 1000);
-      
-      if (restDurationSeconds > 0) {
-        restSubmittedRef.current = true;
-        try {
-          await api.addRestTime(userId, restDurationSeconds);
-        } catch (error) {
-          if (process.env.NODE_ENV === "development") {
-            console.error("Failed to save rest time:", error);
-          }
+    if (breakStartedRef.current) {
+      breakStartedRef.current = false;
+      try {
+        if (onBreakEnd) await onBreakEnd();
+        if (onStatsRefresh) onStatsRefresh();
+      } catch (error) {
+        if (process.env.NODE_ENV === "development") {
+          console.error("Failed to end break:", error);
         }
       }
     }
