@@ -103,6 +103,13 @@ export function FunEngineModal({ open, onClose, energyLevel, userId, sessionActi
     }
   }, [mode]);
 
+  // Auto-load next longread when user finishes reading
+  useEffect(() => {
+    if (longreadEnded && mode === "read") {
+      loadNextLongread();
+    }
+  }, [longreadEnded]);
+
   useEffect(() => {
     if (mode === "meditation" && !meditationComplete) {
       const totalDuration = 105;
@@ -249,21 +256,12 @@ export function FunEngineModal({ open, onClose, energyLevel, userId, sessionActi
       return (
         <div className="text-center py-12">
           <p className="text-lg font-semibold mb-6">{t("video.oneMore")}</p>
-          <div className="flex gap-3 justify-center">
-            <button
-              onClick={loadNextVideo}
-              className="px-6 py-3 rounded-lg bg-gradient-to-r from-purple-start to-purple-end text-white font-semibold hover:opacity-90 transition-opacity"
-            >
-              {t("video.yes")}
-            </button>
-            <button
-              onClick={() => setMode("menu")}
-              className="px-6 py-3 rounded-lg border border-border font-semibold hover:bg-border/50 transition-colors"
-            >
-              {t("video.no")}
-            </button>
-          </div>
-          <p className="text-sm text-muted mt-6">{t("video.backToWork")}</p>
+          <button
+            onClick={loadNextVideo}
+            className="px-6 py-3 rounded-lg bg-gradient-to-r from-purple-start to-purple-end text-white font-semibold hover:opacity-90 transition-opacity"
+          >
+            {t("video.yes")}
+          </button>
         </div>
       );
     }
@@ -293,26 +291,7 @@ export function FunEngineModal({ open, onClose, energyLevel, userId, sessionActi
     }
 
     if (longreadEnded) {
-      return (
-        <div className="text-center py-12">
-          <p className="text-lg font-semibold mb-6">{t("read.oneMore")}</p>
-          <div className="flex gap-3 justify-center">
-            <button
-              onClick={loadNextLongread}
-              className="px-6 py-3 rounded-lg bg-gradient-to-r from-purple-start to-purple-end text-white font-semibold hover:opacity-90 transition-opacity"
-            >
-              {t("read.yes")}
-            </button>
-            <button
-              onClick={() => setMode("menu")}
-              className="px-6 py-3 rounded-lg border border-border font-semibold hover:bg-border/50 transition-colors"
-            >
-              {t("read.no")}
-            </button>
-          </div>
-          <p className="text-sm text-muted mt-6">{t("read.backToWork")}</p>
-        </div>
-      );
+      return <div className="text-center py-12"><p className="text-muted">{t("loading")}</p></div>;
     }
 
     return (
@@ -337,7 +316,7 @@ export function FunEngineModal({ open, onClose, energyLevel, userId, sessionActi
           </div>
         )}
         <button
-          onClick={() => setLongreadEnded(true)}
+          onClick={loadNextLongread}
           className="mt-6 px-6 py-2 rounded-lg bg-gradient-to-r from-purple-start to-purple-end text-white font-semibold hover:opacity-90 transition-opacity"
         >
           {t("read.oneMore")}

@@ -74,6 +74,12 @@ async def seed_fun_content(csv_path: str) -> None:
         settings.DATABASE_URL,
         echo=False,
         future=True,
+        pool_pre_ping=True,
+        execution_options={"compiled_cache": None},
+        connect_args={
+            "statement_cache_size": 0,
+            "prepared_statement_cache_size": 0,
+        },
     )
     
     async_session = sessionmaker(

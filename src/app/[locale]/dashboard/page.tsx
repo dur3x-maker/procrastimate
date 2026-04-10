@@ -169,6 +169,13 @@ export default function DashboardPage() {
   const [userId, setUserId] = useState("");
   const [clientSessionId, setClientSessionId] = useState<string | null>(null);
 
+  // Timestamp-based focus/break tracking
+  type SessionPhase = "idle" | "focus" | "break";
+  const [sessionPhase, setSessionPhase] = useState<SessionPhase>("idle");
+  const phaseStartRef = useRef<number>(0);
+  const accFocusMsRef = useRef<number>(0);
+  const accBreakMsRef = useRef<number>(0);
+
   const store = useDashboardStore();
   const taskStore = useTasks();
   const backendAchievements = useBackendAchievements();
@@ -260,8 +267,17 @@ export default function DashboardPage() {
 
   const handleOpenFunEngineFromSuggestion = () => {
     setShowBreakSuggestion(false);
+    // Accumulate focus time and switch to break phase
+    if (sessionPhase === "focus" && phaseStartRef.current > 0) {
+      accFocusMsRef.current += Date.now() - phaseStartRef.current;
+    }
+    setSessionPhase("break");
+    phaseStartRef.current = Date.now();
     setFunModalOpen(true);
     incrementFunEngineOpens();
+    sendEventWithRetry(userId, "fun_engine_open", {
+      client_session_id: clientSessionId,
+    });
   };
 
   const handleIgnoreBreakSuggestion = () => {
@@ -326,6 +342,13 @@ export default function DashboardPage() {
     const task = taskStore.tasks.find((t) => t.id === taskId);
     if (!task || task.type !== "work") return;
 
+    // Accumulate focus time from current phase
+    if (sessionPhase === "focus" && phaseStartRef.current > 0) {
+      accFocusMsRef.current += Date.now() - phaseStartRef.current;
+      phaseStartRef.current = 0;
+    }
+    setSessionPhase("idle");
+
     const targetMs = task.durationMin * 60 * 1000;
     const actualElapsed = task.startedAt ? Date.now() - task.startedAt : 0;
     const totalPausedMs = task.totalPausedMs || 0;
@@ -356,9 +379,10 @@ export default function DashboardPage() {
     if (isEarlyCompletion) {
       window.open("https://www.youtube.com/watch?v=2MtOpB5LlUA", "_blank");
     }
+    setIsEarlyCompletion(false);
 
     const breakSlot = taskStore.tasks.find(
-      (t) => t.type === "break" && !t.completed
+      (t) => t.type === "break" && t.status === "pending"
     );
     if (breakSlot) {
       taskStore.startTask(breakSlot.id);
@@ -371,6 +395,16 @@ export default function DashboardPage() {
       setPendingBreakSlot(null);
     }
     setBreakModalOpen(false);
+    setIsEarlyCompletion(false);
+
+    // Abandon the orphaned break slot so it doesn't get picked up later
+    const orphanedBreak = taskStore.tasks.find(
+      (t) => t.type === "break" && t.status === "pending"
+    );
+    if (orphanedBreak) {
+      taskStore.abandonTask(orphanedBreak.id);
+    }
+
     incrementSkippedBreaks();
     backendAchievements.updateAchievement("ignore_break_10", 1);
   };
@@ -396,6 +430,10 @@ export default function DashboardPage() {
     }
     taskStore.startTask(id);
     store.setActiveTaskId(id);
+
+    // Start focus phase
+    setSessionPhase("focus");
+    phaseStartRef.current = Date.now();
   };
 
   if (!mounted) return null;
@@ -476,12 +514,20 @@ export default function DashboardPage() {
                 if (taskStore.activeTask) {
                   handleUserAction();
                   taskStore.pauseTask(taskStore.activeTask.id);
+                  sendEventWithRetry(userId, "session_pause", {
+                    task_id: taskStore.activeTask.id,
+                    client_session_id: clientSessionId,
+                  });
                 }
               }}
               onResume={() => {
                 if (taskStore.activeTask) {
                   handleUserAction();
                   taskStore.resumeTask(taskStore.activeTask.id);
+                  sendEventWithRetry(userId, "session_resume", {
+                    task_id: taskStore.activeTask.id,
+                    client_session_id: clientSessionId,
+                  });
                 }
               }}
             />
@@ -535,7 +581,19 @@ export default function DashboardPage() {
 
             {/* Fun Engine Button */}
             <button
-              onClick={() => setFunModalOpen(true)}
+              onClick={() => {
+                // Accumulate focus time and switch to break phase
+                if (sessionPhase === "focus" && phaseStartRef.current > 0) {
+                  accFocusMsRef.current += Date.now() - phaseStartRef.current;
+                }
+                setSessionPhase("break");
+                phaseStartRef.current = Date.now();
+                setFunModalOpen(true);
+                incrementFunEngineOpens();
+                sendEventWithRetry(userId, "fun_engine_open", {
+                  client_session_id: clientSessionId,
+                });
+              }}
               className="w-full py-2 px-4 rounded-lg bg-gradient-to-r from-purple-start to-purple-end text-white font-semibold text-xs hover:opacity-90 transition-opacity"
             >
               {t("distractMe")}
@@ -618,7 +676,20 @@ export default function DashboardPage() {
       {/* Fun Engine Modal */}
       <FunEngineModal
         open={funModalOpen}
-        onClose={() => setFunModalOpen(false)}
+        onClose={() => {
+          // Accumulate break time and switch back to focus
+          if (sessionPhase === "break" && phaseStartRef.current > 0) {
+            accBreakMsRef.current += Date.now() - phaseStartRef.current;
+          }
+          if (taskStore.activeTask) {
+            setSessionPhase("focus");
+            phaseStartRef.current = Date.now();
+          } else {
+            setSessionPhase("idle");
+            phaseStartRef.current = 0;
+          }
+          setFunModalOpen(false);
+        }}
         energyLevel={currentEnergyLevel}
         userId={userId}
         sessionActive={store.sessionActive}
